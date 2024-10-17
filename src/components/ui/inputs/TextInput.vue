@@ -67,11 +67,11 @@ const inputValue = computed({
     }
 
     &__input {
-      @include fonts.font-style($line-height: 20px);
+      @include fonts.font-style($line-height: consts.$ui-line-height);
 
       display: block;
       width: 100%;
-      padding: 7px $shift;
+      padding: consts.$ui-tb-padding $shift;
       margin-top: $row-gap;
       border: 1px solid colors.$base-05;
       border-radius: consts.$border-radius;

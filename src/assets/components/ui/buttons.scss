@@ -1,0 +1,197 @@
+@use '@/assets/general/colors' as colors;
+@use '@/assets/general/consts' as consts;
+@use '@/assets/general/fonts' as fonts;
+
+@mixin btn-color($color, $bg-color, $border-color) {
+  color: $color;
+  background-color: $bg-color;
+  border-color: $border-color;
+}
+
+.btn {
+  @include fonts.font-style($line-height: consts.$ui-line-height);
+
+  display: inline-block;
+  // - 1px погрешность чтобы input был вровень с button
+  padding: calc(consts.$ui-tb-padding - 1px) calc(consts.$border-radius - 1px);
+  text-align: center;
+  text-decoration: none;
+  background: none;
+  border: 2px solid transparent;
+  border-radius: consts.$border-radius;
+  cursor: pointer;
+  transition:
+          color .3s ease-in-out,
+          background-color .3s ease-in-out,
+          border-color .3s ease-in-out;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+
+  &.btn-filled {
+    &.primary {
+      @include btn-color(colors.$base-12, colors.$blue-5, colors.$blue-5);
+
+      &:hover {
+        @include btn-color(colors.$base-12, colors.$blue-6, colors.$blue-6);
+      }
+
+      &:active {
+        @include btn-color(colors.$base-10, colors.$blue-7, colors.$blue-7);
+      }
+
+      &:disabled {
+        @include btn-color(colors.$base-10, colors.$blue-3, colors.$blue-3);
+      }
+    }
+
+    &.secondary {
+      @include btn-color(colors.$base-12, colors.$base-07, colors.$base-07);
+
+      &:hover {
+        @include btn-color(colors.$base-12, colors.$base-06, colors.$base-06);
+      }
+
+      &:active {
+        @include btn-color(colors.$base-12, colors.$base-05, colors.$base-05);
+      }
+
+      &:disabled {
+        @include btn-color(colors.$base-12, colors.$base-08, colors.$base-08);
+      }
+    }
+    
+    &.success {
+      @include btn-color(colors.$base-12, colors.$green-5, colors.$green-5);
+
+      &:hover {
+        @include btn-color(colors.$base-12, colors.$green-6, colors.$green-6);
+      }
+
+      &:active {
+        @include btn-color(colors.$base-10, colors.$green-7, colors.$green-7);
+      }
+
+      &:disabled {
+        @include btn-color(colors.$base-10, colors.$green-3, colors.$green-3);
+      }
+    }
+
+    &.warning {
+      @include btn-color(colors.$base-12, colors.$yellow-5, colors.$yellow-5);
+
+      &:hover {
+        @include btn-color(colors.$base-12, colors.$yellow-6, colors.$yellow-6);
+      }
+
+      &:active {
+        @include btn-color(colors.$base-10, colors.$yellow-7, colors.$yellow-7);
+      }
+
+      &:disabled {
+        @include btn-color(colors.$base-13, colors.$yellow-3, colors.$yellow-3);
+      }
+    }
+
+    &.danger {
+      @include btn-color(colors.$base-12, colors.$red-5, colors.$red-5);
+
+      &:hover {
+        @include btn-color(colors.$base-12, colors.$red-6, colors.$red-6);
+      }
+
+      &:active {
+        @include btn-color(colors.$base-10, colors.$red-7, colors.$red-7);
+      }
+
+      &:disabled {
+        @include btn-color(colors.$base-10, colors.$red-3, colors.$red-3);
+      }
+    }
+  }
+
+  &.btn-outline {
+    &.primary {
+      @include btn-color(colors.$blue-5, transparent, colors.$blue-5);
+
+      &:hover {
+        @include btn-color(colors.$base-12, colors.$blue-5, colors.$blue-5);
+      }
+
+      &:active {
+        @include btn-color(colors.$base-12, colors.$blue-6, colors.$blue-6);
+      }
+
+      &:disabled {
+        @include btn-color(colors.$blue-3, transparent, colors.$blue-3);
+      }
+    }
+  }
+
+  &.secondary {
+    @include btn-color(colors.$base-07, transparent, colors.$base-07);
+
+    &:hover {
+      @include btn-color(colors.$base-12, colors.$base-07, colors.$base-07);
+    }
+
+    &:active {
+      @include btn-color(colors.$base-12, colors.$base-06, colors.$base-06);
+    }
+
+    &:disabled {
+      @include btn-color(colors.$base-08, transparent, colors.$base-08);
+    }
+  }
+
+  &.success {
+    @include btn-color(colors.$green-5, transparent, colors.$green-5);
+
+    &:hover {
+      @include btn-color(colors.$base-12, colors.$green-5, colors.$green-5);
+    }
+
+    &:active {
+      @include btn-color(colors.$base-12, colors.$green-6, colors.$green-6);
+    }
+
+    &:disabled {
+      @include btn-color(colors.$green-3, transparent, colors.$green-3);
+    }
+  }
+
+  &.warning {
+    @include btn-color(colors.$yellow-5, transparent, colors.$yellow-5);
+
+    &:hover {
+      @include btn-color(colors.$base-12, colors.$yellow-5, colors.$yellow-5);
+    }
+
+    &:active {
+      @include btn-color(colors.$base-12, colors.$yellow-6, colors.$yellow-6);
+    }
+
+    &:disabled {
+      @include btn-color(colors.$yellow-3, transparent, colors.$yellow-3);
+    }
+  }
+
+  &.danger {
+    @include btn-color(colors.$red-5, transparent, colors.$red-5);
+
+    &:hover {
+      @include btn-color(colors.$base-12, colors.$red-5, colors.$red-5);
+    }
+
+    &:active {
+      @include btn-color(colors.$base-12, colors.$red-6, colors.$red-6);
+    }
+
+    &:disabled {
+      @include btn-color(colors.$red-3, transparent, colors.$red-3);
+    }
+  }
+}
+
+
