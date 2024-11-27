@@ -4,6 +4,7 @@
 
 @mixin btn-color($color, $bg-color, $border-color) {
   color: $color;
+  fill: $color;
   background-color: $bg-color;
   border-color: $border-color;
 }

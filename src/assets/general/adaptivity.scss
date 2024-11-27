@@ -1,0 +1,57 @@
+$sizes: (
+        'xs': 390px,
+        'sm': 576px,
+        'md': 768px,
+        'lg': 992px,
+        'xl': 1200px,
+        'bg': 1440px,
+);
+
+@mixin media($minmax, $media) {
+  @each $size, $resolution in $sizes {
+    @if $media == $size {
+      @media only screen and (#{$minmax}-width: $resolution) {
+        @content;
+      }
+    }
+  }
+}
+
+// hover только для НЕ сенсорных нажатий
+@mixin cursor-hover {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      @content;
+    }
+  }
+}
+
+// active только для сенсорных эранов
+@mixin touch-active {
+  @media (hover: none) {
+    &:active {
+      @content;
+    }
+  }
+}
+
+// active только для НЕ сенсорных эранов
+@mixin cursor-active {
+  @media (hover: hover) and (pointer: fine) {
+    &:active {
+      @content;
+    }
+  }
+}
+
+// hover – для НЕ сенсорных нажатий и active – для сенсорных эранов
+@mixin cursor-hover-and-touch-active {
+  @include cursor-hover {
+    @content;
+  }
+
+  @include touch-active {
+    @content;
+  }
+}
+
