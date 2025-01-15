@@ -41,7 +41,7 @@ async function reward(musicBandId: number) {
         <SimpleButton class="shortcut-btn" :elemColor="ElemColor.SECONDARY" @click="async () => {await reward(value.id)}">
           <TrophyStarIcon class="shortcut-btn__icon" />
         </SimpleButton>
-        <RouterLinkButton :to="`/music-bands/${value.id}`" class="shortcut-btn" :elemColor="ElemColor.WARNING">
+        <RouterLinkButton :to="{ name: 'music-bands-edit', params: { id: value.id }}" class="shortcut-btn" :elemColor="ElemColor.WARNING">
           <PenToSquareIcon class="shortcut-btn__icon" />
         </RouterLinkButton>
         <SimpleButton class="shortcut-btn" :elemColor="ElemColor.DANGER" @click="() => {musicBandStore.deleteMusicBand(value.id)}">
@@ -100,7 +100,7 @@ async function reward(musicBandId: number) {
           height: 16px;
         }
       }
-      
+
     }
   }
 

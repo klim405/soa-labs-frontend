@@ -2,22 +2,31 @@ import { createRouter, createWebHistory } from 'vue-router'
 import TestPage from '../views/TestPage.vue'
 import MusicBandListPage from '@/views/MusicBandListPage.vue'
 import MusicBandEditPage from '@/views/MusicBandEditPage.vue'
+import MusicBandCreatePage from '@/views/MusicBandCreatePage.vue'
+
+// const PATH_PREFIX = '/~s327630'
+const PATH_PREFIX = ''
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
+      path: `${PATH_PREFIX}/`,
       name: 'home',
       component: TestPage
     },
     {
-      path: '/music-bands',
+      path: `${PATH_PREFIX}/music-bands`,
       name: 'music-bands',
       component: MusicBandListPage
     },
     {
-      path: '/music-bands/:id',
+      path: `${PATH_PREFIX}/music-bands/create`,
+      name: 'music-bands-create',
+      component: MusicBandCreatePage
+    },
+    {
+      path: `${PATH_PREFIX}/music-bands/:id`,
       name: 'music-bands-edit',
       component: MusicBandEditPage
     }
