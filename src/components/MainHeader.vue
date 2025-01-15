@@ -14,7 +14,7 @@
       <ul class="nav-links">
         <li class="nav-link-wrapper">
           <RouterLink class="nav-link" to="/music-bands">Музыкальные группы</RouterLink>
-          <RouterLink class="nav-link" to="/music-bands/edit">Создать группу</RouterLink>
+          <RouterLink class="nav-link" to="/music-bands/create">Создать группу</RouterLink>
         </li>
       </ul>
     </div>

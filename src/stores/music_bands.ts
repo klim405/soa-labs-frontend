@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { computed, reactive } from 'vue'
 import { ofetch } from 'ofetch'
 import { XMLBuilder, XMLParser } from 'fast-xml-parser'
-import type { MusicBand } from '@/utils/schemas/musicBand'
+import type { MusicBand, MusicBandEditForm } from '@/utils/schemas/musicBand'
 
 function parseMusicBandXML(txt: string) {
   const parser = new XMLParser({
@@ -21,8 +21,27 @@ export const useMusicBandStore = defineStore('music_band', () => {
 
   const musicBandList = reactive<MusicBand[]>([])
 
-  const getMusicBand = computed((musicBandId) => {
-    return musicBandList.findIndex(
+  const filterMusicBandByName = computed(() => (startsWithVal: string, orderBy: keyof MusicBand = 'id', ascending = true) => {
+    const filteredList = musicBandList.filter(
+      (musicBand) => String(musicBand.name).startsWith(startsWithVal)
+    )
+    filteredList.sort((a, b) => {
+      const valueA = a[orderBy];
+      const valueB = b[orderBy];
+  
+      if (valueA === undefined || valueB === undefined) return 0;
+  
+      if (valueA > valueB) return ascending ? 1 : -1;
+      if (valueA < valueB) return ascending ? -1 : 1;
+  
+      return 0;
+    });
+    console.log(filteredList)
+    return filteredList;
+  })
+
+  const getMusicBand = computed(() => (musicBandId: number) => {
+    return musicBandList.find(
       (musicBand) => musicBand.id == musicBandId
     );
   })
@@ -45,13 +64,24 @@ export const useMusicBandStore = defineStore('music_band', () => {
     }
   }
 
-  async function addMusicBand(musicBand: MusicBand) {
-    await ofetch(`${MUSIC_BAND_URL}/music-bands/`, {
+  async function addMusicBand(musicBand: MusicBandEditForm) {
+    await ofetch(`${MUSIC_BAND_URL}/music-bands`, {
       method: "POST",
       headers: {
+        'Accept': 'application/xml',
         'Content-Type': 'application/xml'
       },
-      body: new XMLBuilder().build({"MusicBandCreateSchema": musicBand}),
+      body: new XMLBuilder().build({"MusicBandCreateSchema": {
+        name: musicBand.name,
+        description: musicBand.description,
+        coordinates: {
+          x: musicBand.x,
+          y: musicBand.y,
+        },
+        numberOfParticipants: musicBand.numberOfParticipants,
+        genre: musicBand.genre,
+        label: musicBand.label ? {name: musicBand.label} : undefined,
+      }}),
       parseResponse: parseMusicBandXML,
       onResponse: ({response}) => {
         if (response.status == 200) {
@@ -61,14 +91,28 @@ export const useMusicBandStore = defineStore('music_band', () => {
     })
   }
 
-  async function updateMusicBand(musicBand: MusicBand) {
-    const id = musicBand.id
-    await ofetch(`${MUSIC_BAND_URL}/music-bands/${id}`, {
+  async function updateMusicBand(musicBandId: number, musicBand: MusicBandEditForm) {
+    await ofetch(`${MUSIC_BAND_URL}/music-bands/${musicBandId}`, {
       method: "PUT",
+      headers: {
+        'Accept': 'application/xml',
+        'Content-Type': 'application/xml',
+      },
+      body: new XMLBuilder().build({"MusicBandUpdateSchema": {
+        name: musicBand.name,
+        description: musicBand.description,
+        coordinates: {
+          x: musicBand.x,
+          y: musicBand.y,
+        },
+        numberOfParticipants: musicBand.numberOfParticipants,
+        genre: musicBand.genre,
+        label: musicBand.label ? {name: musicBand.label} : undefined,
+      }}),
       parseResponse: parseMusicBandXML,
       onResponse: ({response}) => {
         if (response.status == 200) {
-          const listIndex = musicBandList.findIndex((mb) => mb.id == id)
+          const listIndex = musicBandList.findIndex((mb) => mb.id == musicBandId)
           musicBandList.splice(listIndex, 1, response._data)
         }
       }
@@ -91,6 +135,9 @@ export const useMusicBandStore = defineStore('music_band', () => {
   async function $reset() {
     await ofetch(`${MUSIC_BAND_URL}/music-bands`, {
       method: "GET",
+      headers: {
+        'Accept': 'application/xml',
+      },
       parseResponse: (txt) => {
         const parser = new XMLParser({
           tagValueProcessor: (tagName, tagValue) => {
@@ -112,6 +159,7 @@ export const useMusicBandStore = defineStore('music_band', () => {
 
   return {
     musicBandList,
+    filterMusicBandByName,
     getMusicBand,
     loadMusicBand,
     addMusicBand,

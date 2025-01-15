@@ -13,11 +13,22 @@ export interface Label {
 
 export interface MusicBand {
   id: number
-  name: number
+  name: string
   coordinates: Coordinates
-  description: string | null
-  numberOfParticipants: number | null
+  description?: string
+  numberOfParticipants?: number
   creationDate: Date
   genre: MusicGenre
   label?: Label
+}
+
+export interface MusicBandEditForm {
+  id?: number
+  name: string
+  x: number
+  y: number
+  description?: string
+  numberOfParticipants?: number
+  genre: string
+  label?: string
 }

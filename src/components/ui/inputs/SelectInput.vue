@@ -4,6 +4,7 @@ import { InputStatus } from '@/utils/style/style'
 
 const props = withDefaults(
   defineProps<{
+    options: unknown[]
     labelText: string
     modelValue: unknown
     helpText?: string
@@ -19,7 +20,7 @@ const emits = defineEmits([
   'update:modelValue'
 ])
 
-const inputValue = computed({
+const selectValue = computed({
   get() {
     return props.modelValue
   },
@@ -30,12 +31,14 @@ const inputValue = computed({
 </script>
 
 <template>
-  <div class="text-input">
-    <label class="text-input__label">
-      <span class="text-input__label__wrapper">{{ labelText }}</span>
-      <input class="text-input__input" :class="status" v-model="inputValue" type="text" v-bind="$attrs">
+  <div class="select-input">
+    <label class="select-input__label">
+      <span class="select-input__label__wrapper">{{ labelText }}</span>
+      <select class="select-input__input" :class="status" v-model="selectValue" v-bind="$attrs">
+        <option v-for="option in options" :key="String(option)" :value="option">{{ option }}</option>
+      </select>
     </label>
-    <p v-if="helpText" class="text-input__help-text" :class="status">{{ helpText }}</p>
+    <p v-if="helpText" class="select-input__help-text" :class="status">{{ helpText }}</p>
   </div>
 </template>
 
@@ -47,7 +50,7 @@ const inputValue = computed({
   $row-gap: 6px;
   $shift: calc( consts.$border-radius * 0.8 );
 
-  .text-input {
+  .select-input {
     display: flex;
     flex-direction: column;
     margin-top: consts.$vertical-elem-spacing;

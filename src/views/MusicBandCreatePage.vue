@@ -2,33 +2,19 @@
 import DefaultLayout from '@/layouts/DefaultLayout.vue';
 import { useMusicBandStore } from '@/stores/music_bands';
 import { useForm } from 'vee-validate';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { number, object, string } from 'yup';
 import { toTypedSchema } from '@vee-validate/yup';
 import TextInput from '@/components/ui/inputs/TextInput.vue';
 import SelectInput from '@/components/ui/inputs/SelectInput.vue';
 import { ButtonFormStyle, ElemColor, InputStatus } from '@/utils/style/style';
-import { computed, onMounted } from 'vue';
-import type { MusicBand } from '@/utils/schemas/musicBand';
 import SimpleButton from '@/components/ui/buttons/SimpleButton.vue';
 import { MusicGenre } from '@/utils/schemas/musicGenre';
 
-const route = useRoute();
 const router = useRouter();
 const musicBandStore = useMusicBandStore();
 
-const currMusicBand = computed<MusicBand | undefined>(() => musicBandStore.getMusicBand(Number(route.params.id)))
-
 const { defineField, handleSubmit } = useForm({
-  initialValues: {
-    name: currMusicBand.value?.name,
-    numberOfParticipants: currMusicBand.value?.numberOfParticipants,
-    description: currMusicBand.value?.description,
-    genre: currMusicBand.value?.genre,
-    x: currMusicBand.value?.coordinates.x,
-    y: currMusicBand.value?.coordinates.y,
-    label: currMusicBand.value?.label?.name,
-  },
   validationSchema: toTypedSchema(object({
     name: string().required().max(255),
     numberOfParticipants: number().min(1),
@@ -92,13 +78,9 @@ const [label, labelProps] = defineField('label', {
 });
 
 const onSubmit = handleSubmit(async (values) => {
-  await musicBandStore.updateMusicBand(Number(route.params.id), values);
+  await musicBandStore.addMusicBand(values);
   router.push({name: "music-bands"});
 })
-
-onMounted(async () => {
-  musicBandStore.loadMusicBand(Number(route.params.id))
-});
 </script>
 
 <template>

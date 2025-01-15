@@ -3,9 +3,11 @@ import type { MusicBand } from '@/utils/schemas/musicBand'
 import SimpleButton from '@/components/ui/buttons/SimpleButton.vue';
 import TrashCanIcon from '@/assets/svg/trash-can-icon.svg';
 import PenToSquareIcon from '@/assets/svg/pen-to-square-icon.svg';
+import TrophyStarIcon from '@/assets/svg/trophy-star-icon.svg';
 import { ElemColor } from '@/utils/style/style';
 import { useMusicBandStore } from '@/stores/music_bands';
 import RouterLinkButton from './ui/buttons/RouterLinkButton.vue';
+import { ofetch } from 'ofetch';
 
 defineProps<{
   value: MusicBand
@@ -13,6 +15,22 @@ defineProps<{
 
 const musicBandStore = useMusicBandStore();
 
+const GRAMMY_URL = 'https://localhost:8444'
+async function reward(musicBandId: number) {
+  const musicBand = musicBandStore.getMusicBand(musicBandId)
+  await ofetch(`${GRAMMY_URL}/grammy/${musicBand?.id}/reward/${musicBand?.genre}`, {
+      method: "POST",
+      parseResponse: (txt) => (txt),
+      onResponse: ({response}) => {
+        if (response.status == 201) {
+          alert(`Номинирован ${musicBand?.name}`)
+        } else if (response.status == 503) {
+          alert(`Сервис MusicBand не доступен поробуйте позже!`)
+        }
+      }
+    }
+  )
+}
 </script>
 
 <template>
@@ -20,6 +38,9 @@ const musicBandStore = useMusicBandStore();
     <div class="music-band__header">
       <h2 class="music-band__header__name">{{ value.name }}</h2>
       <div class="music-band__header__shortcuts">
+        <SimpleButton class="shortcut-btn" :elemColor="ElemColor.SECONDARY" @click="async () => {await reward(value.id)}">
+          <TrophyStarIcon class="shortcut-btn__icon" />
+        </SimpleButton>
         <RouterLinkButton :to="`/music-bands/${value.id}`" class="shortcut-btn" :elemColor="ElemColor.WARNING">
           <PenToSquareIcon class="shortcut-btn__icon" />
         </RouterLinkButton>

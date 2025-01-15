@@ -9,8 +9,6 @@ import { XMLBuilder, XMLParser } from 'fast-xml-parser'
 import { MusicGenre } from '@/utils/schemas/musicGenre'
 
 const value = ref('')
-
-
 </script>
 
 <template>
